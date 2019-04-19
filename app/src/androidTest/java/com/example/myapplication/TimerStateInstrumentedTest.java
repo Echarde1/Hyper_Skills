@@ -11,8 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -21,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class TimerStateInstrumentedTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule
@@ -41,13 +43,29 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void startButtonExist() {
+    public void startTimer() throws InterruptedException {
+        onView(withId(R.id.timerView)).check(matches(withText("00:03")));
         onView(withText("Start")).perform(ViewActions.click());
+        Thread.sleep(4000);
+        onView(withId(R.id.timerView)).check(matches(withText("00:00")));
     }
 
     @Test
-    public void resetButtonExist() {
+    public void resetTimer() throws InterruptedException {
+        onView(withText("Start")).perform(ViewActions.click());
+        Thread.sleep(4000);
+        onView(withId(R.id.timerView)).check(matches(withText("00:00")));
         onView(withText("Reset")).perform(ViewActions.click());
+        onView(withId(R.id.timerView)).check(matches(withText("00:03")));
+    }
+
+    @Test
+    public void interruptTimer() throws InterruptedException {
+        onView(withText("Start")).perform(ViewActions.click());
+        Thread.sleep(2000);
+        onView(withText("Start")).perform(ViewActions.click());
+        Thread.sleep(1000);
+        onView(withId(R.id.timerView)).check(matches(not(withText("00:00"))));
     }
 
 }
