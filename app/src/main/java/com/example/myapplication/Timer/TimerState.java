@@ -1,7 +1,12 @@
 package com.example.myapplication.Timer;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Color;
+
+import com.example.myapplication.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -87,6 +92,7 @@ public class TimerState {
                 if (!timeOver()) {
                     currentPeriod.add(Calendar.SECOND, -1);
                 } else if (state == State.Work && currentRounds > 0) {
+                    sendNotification();
                     state = State.Rest;
                     currentPeriod = (Calendar) restPeriod.clone();
                     activity.runOnUiThread(new Runnable() {
@@ -121,6 +127,20 @@ public class TimerState {
         }, DELAY, PERIOD);
         timerView.start(getSeconds());
     }
+
+    private void sendNotification() {
+        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notify = new Notification.Builder
+                (activity.getApplicationContext())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("You need a rest!!!")
+                .setContentText("It's time to stop")
+                .build();
+
+        notify.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(1, notify);
+    }
+
 
     private boolean timeOver() {
         return currentPeriod.get(Calendar.MINUTE) == 0 && currentPeriod.get(Calendar.SECOND) == 0;
