@@ -46,6 +46,14 @@ public class TimerState {
         return state;
     }
 
+    public void setWorkPeriod(Calendar workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public void setRestPeriod(Calendar restPeriod) {
+        this.restPeriod = restPeriod;
+    }
+
     public void reset() {
         state = State.Init;
 
