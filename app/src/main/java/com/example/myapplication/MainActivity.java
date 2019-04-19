@@ -4,12 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.myapplication.Timer.TimerState;
+import com.example.myapplication.Timer.TimerView;
 
 import java.util.Calendar;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,32 +21,24 @@ public class MainActivity extends AppCompatActivity {
 
         final Button startButton = findViewById(R.id.startButton);
         final Button resetButton = findViewById(R.id.resetButton);
-        final TextView timerView = findViewById(R.id.timerView);
 
+        final TimerView timerView = findViewById(R.id.timerView);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 3);
-        timerState = new TimerState(calendar);
+        Calendar work = Calendar.getInstance();
+        work.set(Calendar.MINUTE, 0);
+        work.set(Calendar.SECOND, 5);
 
-        timerView.setText(timerState.getTime());
+        Calendar rest = Calendar.getInstance();
+        rest.set(Calendar.MINUTE, 0);
+        rest.set(Calendar.SECOND, 3);
+
+        timerState = new TimerState(work, rest, 1, timerView, this);
+        timerState.reset();
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimerTask timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                timerView.setText(timerState.getTime());
-                            }
-                        });
-                    }
-                };
-
-                timerState.start(timerTask, 1000, 1000);
+                timerState.start();
             }
         });
 
@@ -55,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 timerState.reset();
-                timerView.setText(timerState.getTime());
             }
         });
 
