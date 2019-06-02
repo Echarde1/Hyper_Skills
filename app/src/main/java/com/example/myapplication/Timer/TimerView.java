@@ -37,15 +37,11 @@ public class TimerView extends View {
     private ValueAnimator animationTimer;
 
     public TimerView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public TimerView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public TimerView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context, attrs);
 
         text = "";
 
@@ -61,6 +57,28 @@ public class TimerView extends View {
         textPaint.setColor(textColor);
         textPaint.setTextSize(128);
         textPaint.setTextAlign(Paint.Align.CENTER);
+    }
+
+    public TimerView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int measuredWidth = measure(widthMeasureSpec);
+        int measuredHeight = measure(heightMeasureSpec);
+        int d = Math.min(measuredWidth, measuredHeight);
+        setMeasuredDimension(d, d);
+    }
+
+    private int measure(int measureSpec) {
+        int specMode = View.MeasureSpec.getMode(measureSpec);
+        int specSize = View.MeasureSpec.getSize(measureSpec);
+        if (specMode == MeasureSpec.UNSPECIFIED) {
+            return 200;
+        } else {
+            return specSize;
+        }
     }
 
     @Override
