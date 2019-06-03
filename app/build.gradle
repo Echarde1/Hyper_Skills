@@ -16,6 +16,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -32,4 +35,5 @@ dependencies {
     // required if you want to use Mockito for Android tests
     androidTestImplementation 'org.mockito:mockito-android:2.7.22'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    implementation "com.android.support.test.espresso:espresso-idling-resource:3.0.2"
 }

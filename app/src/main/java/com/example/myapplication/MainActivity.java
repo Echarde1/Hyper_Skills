@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.example.myapplication.Timer.TimerState;
 import com.example.myapplication.Timer.TimerView;
+import com.example.myapplication.util.EspressoCountingIdling;
 
 import java.util.Calendar;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EspressoCountingIdling.increment();
                 LayoutInflater li = LayoutInflater.from(getApplicationContext());
                 View promptsView = li.inflate(R.layout.dialog, null);
 
@@ -99,7 +101,13 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
-                                });
+                                })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                EspressoCountingIdling.decrement();
+                            }
+                        });
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
 

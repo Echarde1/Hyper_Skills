@@ -30,7 +30,6 @@ public class NotificationInstrumentedTest {
     public void sendNotification() throws InterruptedException {
         onView(withText("Start")).perform(ViewActions.click());
         Thread.sleep(6000);
-        String expectedAppName = mActivityRule.getActivity().getString(R.string.app_name);
         String expectedContent = "It's time to stop";
         String expectedTitle = "You need a rest!!!";
 
@@ -44,8 +43,6 @@ public class NotificationInstrumentedTest {
         assertEquals(expectedTitle, title.getText());
         assertTrue(text.getText().startsWith(expectedContent));
 
-        String clearButtonText = mActivityRule.getActivity().getString(R.string.clear_notifications);
-        UiObject2 clearAll = uiDevice.findObject(By.text(clearButtonText));
-        clearAll.click();
+        uiDevice.pressBack();
     }
 }
